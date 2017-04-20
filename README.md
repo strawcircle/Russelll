@@ -13,7 +13,7 @@ allprojects {
 }
 
 dependencies {
-        compile 'com.github.strawcircle:myBruce:1.0.0'
+        compile 'com.github.strawcircle:Russelll:v1.0'
 }
 ```
 
