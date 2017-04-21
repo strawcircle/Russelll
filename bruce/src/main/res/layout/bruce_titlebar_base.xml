@@ -22,8 +22,8 @@
         android:textSize="16sp"
         android:drawablePadding="5dp"
         android:singleLine="true"
-        android:drawableLeft="@drawable/bruce_arrow_back_black"
-        android:drawableStart="@drawable/bruce_arrow_back_black"
+        android:drawableLeft="@drawable/back_black"
+        android:drawableStart="@drawable/back_black"
         android:text="" />
     <RelativeLayout
         android:id="@+id/titlebar_right_text"

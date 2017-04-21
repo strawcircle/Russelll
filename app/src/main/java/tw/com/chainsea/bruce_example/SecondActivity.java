@@ -1,5 +1,6 @@
 package tw.com.chainsea.bruce_example;
 
+import android.os.Bundle;
 import android.support.v7.widget.PopupMenu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -12,20 +13,47 @@ import tw.com.chainsea.bruce.TabHostActivity;
 public class SecondActivity extends TabHostActivity {
 
     @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+    }
+
+    @Override
     public Map<String, TabsInfo> tabsInfoMap() {
         Map<String, TabsInfo> map = new HashMap<>();
         map.put("message", new TabsInfo("message", R.drawable.icon_message, MessageFragment.class,
-                R.drawable.vertical_menu_icon, new OnRightListener() {
+                R.drawable.vertical_menu_icon, R.drawable.contact_all, R.drawable.contact_group, new OnTitleBarListener() {
+
             @Override
-            public void onClick() {
+            public void onRightClick() {
                 showPopupMenu();
+            }
+
+            @Override
+            public void onFirstClick() {
+                setCenterText("全部");
+            }
+
+            @Override
+            public void onSecondClick() {
+                setCenterText("群聊");
             }
         }));
         map.put("contact", new TabsInfo("contact", R.drawable.icon_contact, ContactFragment.class,
-                R.drawable.vertical_menu_icon, new OnRightListener() {
+                R.drawable.vertical_menu_icon, new OnTitleBarListener() {
+
             @Override
-            public void onClick() {
-                showPopupMenu();
+            public void onRightClick() {
+
+            }
+
+            @Override
+            public void onFirstClick() {
+
+            }
+
+            @Override
+            public void onSecondClick() {
+
             }
         }));
         return map;

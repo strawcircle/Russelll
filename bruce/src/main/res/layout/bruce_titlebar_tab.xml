@@ -5,6 +5,25 @@
     android:gravity="center_vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/tab_title_layout_left_first"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/bruce_titlebar_right_bg"
+        android:layout_alignParentLeft="true"
+        android:visibility="gone"
+        android:layout_marginLeft="5dp"/>
+
+    <ImageView
+        android:id="@+id/tab_title_layout_left_second"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:background="@drawable/bruce_titlebar_right_bg"
+        android:layout_toRightOf="@id/tab_title_layout_left_first"
+        android:visibility="gone"
+        android:layout_marginLeft="5dp"/>
+
     <ImageView
         android:id="@+id/tab_title_layout_right"
         android:layout_width="wrap_content"
@@ -20,5 +39,5 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:textSize="18sp"
-        android:textColor="@color/bruce_white"/>
+        android:textColor="@color/bruce_black"/>
 </RelativeLayout>

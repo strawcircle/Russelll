@@ -19,6 +19,8 @@ import tw.com.chainsea.bruce.util.ImageViewerActivity;
 public class MainActivity extends TitlebarActivity {
 
 
+    private String leftContent;
+
     @Override
     protected void init() {
         super.init();
@@ -49,6 +51,17 @@ public class MainActivity extends TitlebarActivity {
         textView.setPadding(10, 0, 10, 0);
         textView.setText("跳");
         return textView;
+    }
+
+    @Override
+    public String leftText() {
+        leftContent = "返回";
+        return leftContent;
+    }
+
+    @Override
+    public void setLeftText(String content) {
+        super.setLeftText(content);
     }
 
     @Override

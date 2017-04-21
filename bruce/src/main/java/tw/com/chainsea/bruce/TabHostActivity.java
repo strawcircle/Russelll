@@ -18,12 +18,18 @@ import java.util.Map;
  */
 public abstract class TabHostActivity extends FragmentActivity {
 
+    private TextView mTvTitle;
+    private ImageView mIvLeftFirst;
+    private ImageView mIvLeftSecond;
+
     public class TabsInfo {
         Class fragment;
         String name;
         int drawable;
         int rightDrawable;
-        OnRightListener rightListener;
+        int leftFirstDrawable;
+        int leftSecondDrawable;
+        OnTitleBarListener titleBarListener;
 
         public TabsInfo( String name, int drawable, Class fragment ) {
             this.fragment = fragment;
@@ -31,18 +37,33 @@ public abstract class TabHostActivity extends FragmentActivity {
             this.drawable = drawable;
         }
 
-        public TabsInfo( String name, int drawable, Class fragment, int rightDrawable, OnRightListener rightListener) {
+        public TabsInfo( String name, int drawable, Class fragment, int rightDrawable, OnTitleBarListener titleBarListener) {
             this.fragment = fragment;
             this.name = name;
             this.drawable = drawable;
             this.rightDrawable = rightDrawable;
-            this.rightListener = rightListener;
+            this.titleBarListener = titleBarListener;
         }
+
+        public TabsInfo(String name, int drawable, Class fragment, int rightDrawable, int leftFirstDrawable,
+                        int leftSecondDrawable, OnTitleBarListener listener) {
+            this.fragment = fragment;
+            this.name = name;
+            this.drawable = drawable;
+            this.rightDrawable = rightDrawable;
+            this.leftFirstDrawable = leftFirstDrawable;
+            this.leftSecondDrawable = leftSecondDrawable;
+            this.titleBarListener = listener;
+        }
+
     }
 
-    public interface OnRightListener {
-        void onClick();
+    public interface OnTitleBarListener {
+        void onRightClick();
+        void onFirstClick();
+        void onSecondClick();
     }
+
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -71,16 +92,23 @@ public abstract class TabHostActivity extends FragmentActivity {
             mTabHost.addTab(tabSpec, tabsMap.get(key).fragment, null);
         }
 
-        final TextView tvTitle = (TextView)findViewById(R.id.tab_title_layout_center);
+        mTvTitle = (TextView)findViewById(R.id.tab_title_layout_center);
         final ImageView ivRight = (ImageView)findViewById(R.id.tab_title_layout_right);
-        tvTitle.setText(tabsMap.get(tabsMap.keySet().iterator().next()).name);
+        mIvLeftFirst = (ImageView) findViewById(R.id.tab_title_layout_left_first);
+        mIvLeftSecond = (ImageView) findViewById(R.id.tab_title_layout_left_second);
+        mTvTitle.setText(tabsMap.get(tabsMap.keySet().iterator().next()).name);
         setRightTitleView(tabsMap, tabsMap.keySet().iterator().next(), ivRight);
+
+        setLeftFirstView(tabsMap, tabsMap.keySet().iterator().next(), mIvLeftFirst);
+        setLeftSecondView(tabsMap, tabsMap.keySet().iterator().next(), mIvLeftSecond);
         mTabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(final String s) {
                 TabsInfo info = tabsMap.get(s);
-                tvTitle.setText(info.name);
+                mTvTitle.setText(info.name);
                 setRightTitleView(tabsMap, s, ivRight);
+                setLeftFirstView(tabsMap, s, mIvLeftFirst);
+                setLeftSecondView(tabsMap, s, mIvLeftSecond);
             }
         });
     }
@@ -97,12 +125,12 @@ public abstract class TabHostActivity extends FragmentActivity {
         final int imageId = tabsMap.get(tag).rightDrawable;
         imageView.setVisibility(View.VISIBLE);
         if ( imageId != 0) {
-            final OnRightListener listener = tabsMap.get(tag).rightListener;
+            final OnTitleBarListener listener = tabsMap.get(tag).titleBarListener;
             imageView.setImageResource(imageId);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onClick();
+                    listener.onRightClick();
                 }
             });
         } else {
@@ -110,7 +138,67 @@ public abstract class TabHostActivity extends FragmentActivity {
         }
     }
 
+    public void setLeftFirstView(Map<String, TabsInfo> tabsMap, String tag, ImageView imageView) {
+        int imageId = tabsMap.get(tag).leftFirstDrawable;
+        imageView.setVisibility(View.VISIBLE);
+        if (imageId != 0) {
+            final OnTitleBarListener listener = tabsMap.get(tag).titleBarListener;
+            imageView.setImageResource(imageId);
+            imageView.setSelected(true);
+            mTvTitle.setText("全部");
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    trigSelected();
+                    listener.onFirstClick();
+                }
+            });
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    public void setLeftSecondView(Map<String, TabsInfo> tabsMap, String tag, ImageView imageView) {
+        int imageId = tabsMap.get(tag).leftSecondDrawable;
+        imageView.setVisibility(View.VISIBLE);
+        if (imageId != 0) {
+            final OnTitleBarListener listener = tabsMap.get(tag).titleBarListener;
+            imageView.setImageResource(imageId);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    trigSelected();
+                    listener.onSecondClick();
+                }
+            });
+        } else {
+            imageView.setVisibility(View.GONE);
+        }
+    }
+
+    private void trigSelected() {
+        if (mIvLeftFirst.isSelected() && !mIvLeftSecond.isSelected()) {
+            mIvLeftFirst.setSelected(false);
+            mIvLeftSecond.setSelected(true);
+        } else if (!mIvLeftFirst.isSelected() && mIvLeftSecond.isSelected()) {
+            mIvLeftFirst.setSelected(true);
+            mIvLeftSecond.setSelected(false);
+        }
+    }
+
     public ImageView getRightView() {
         return (ImageView)findViewById(R.id.tab_title_layout_right);
+    }
+
+    public ImageView getLeftFirst() {
+        return (ImageView) findViewById(R.id.tab_title_layout_left_first);
+    }
+
+    public ImageView getLeftSecond() {
+        return (ImageView) findViewById(R.id.tab_title_layout_left_second);
+    }
+
+    public void setCenterText(String title) {
+        mTvTitle.setText(title);
     }
 }
