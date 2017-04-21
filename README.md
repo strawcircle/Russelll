@@ -1,4 +1,4 @@
-[![](https://jitpack.io/v/ninty90/Bruce.svg)](https://jitpack.io/#ninty90/Bruce)
+[![](https://jitpack.io/v/strawcircle/Russelll.svg)](https://jitpack.io/#strawcircle/Russelll)
 
 # Bruce
 程曦Android应用开发规范库
